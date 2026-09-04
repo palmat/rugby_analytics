@@ -1,0 +1,18 @@
+position_id,position,position_description,position_group,position_unit,shirt_number
+1,loosehead_prop,Loosehead Prop,Front Row,Forwards,1
+2,hooker,Hooker,Front Row,Forwards,2
+3,tighthead_prop,Tighthead Prop,Front Row,Forwards,3
+4,lock,Lock,Second Row,Forwards,4/5
+5,blindside_flanker,Blindside Flanker,Back Row,Forwards,6
+6,openside_flanker,Openside Flanker,Back Row,Forwards,7
+7,number_eight,Number 8,Back Row,Forwards,8
+8,scrum_half,Scrum-Half,Half-Backs,Backs,9
+9,fly_half,Fly-Half,Half-Backs,Backs,10
+10,left_wing,Left Wing,Back Three,Backs,11
+11,inside_centre,Inside Centre,Centres,Backs,12
+12,outside_centre,Outside Centre,Centres,Backs,13
+13,right_wing,Right Wing,Back Three,Backs,14
+14,fullback,Fullback,Back Three,Backs,15
+15,front_row_sub,Front Row Substitute,Forwards Substitute,Forwards,16/17/18
+16,forward_sub,Forwards Substitute,Forwards Substitute,Forwards,19/20/21
+17,back_sub,Backs Substitute,Backs Substitute,Backs,21/22/23

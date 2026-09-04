@@ -1,0 +1,14 @@
+stadium_id,club_name,stadium_name,nickname,venue_type,city,county,postcode,address,latitude,longitude,capacity,pitch_surface,year_opened
+STAD_BATH_01,Bath Rugby,The Recreation Ground,The Rec,Primary Home,Bath,Somerset,BA2 4DS,"Spring Gardens, Bath BA2 4DS",51.3811,-2.3551,14500,Grass,1894
+STAD_BRIS_01,Bristol Bears,Ashton Gate,Ashton Gate,Primary Home,Bristol,Bristol,BS3 2EJ,"Ashton Road, Bristol BS3 2EJ",51.44,-2.6208,27000,Hybrid Grass (GrassMaster),1887
+STAD_EXET_01,Exeter Chiefs,Sandy Park,Sandy Park,Primary Home,Exeter,Devon,EX2 7NN,"Sandy Park Way, Exeter EX2 7NN",50.7093,-3.4675,15600,Hybrid Grass (Hero),2006
+STAD_GLOU_01,Gloucester Rugby,Kingsholm Stadium,Castle Grim / Kingsholm,Primary Home,Gloucester,Gloucestershire,GL1 3AX,"Kingsholm Road, Gloucester GL1 3AX",51.8717,-2.2428,16115,Artificial Turf,1891
+STAD_HARL_01,Harlequins,Twickenham Stoop,The Stoop,Primary Home,Twickenham,Greater London,TW2 7SX,"Langhorn Drive, Twickenham TW2 7SX",51.4502,-0.3418,14816,Grass,1963
+STAD_LEIC_01,Leicester Tigers,Mattioli Woods Welford Road,Welford Road,Primary Home,Leicester,Leicestershire,LE2 7TR,"Aylestone Road, Leicester LE2 7TR",52.6242,-1.1322,25849,Hybrid Grass,1892
+STAD_NEWC_01,Newcastle Falcons,Kingston Park,Kingston Park,Primary Home,Newcastle upon Tyne,Tyne and Wear,NE13 8AF,"Brunton Road, Kenton Bank Foot, Newcastle upon Tyne NE13 8AF",55.0186,-1.6706,10200,Artificial Turf (3G),1990
+STAD_NOR_01,Northampton Saints,cinch Stadium at Franklin's Gardens,Franklin's Gardens,Primary Home,Northampton,Northamptonshire,NN5 5BG,"Weedon Road, Northampton NN5 5BG",52.2393,-0.9192,15200,Hybrid Grass (SISGrass),1880
+STAD_SALE_01,Sale Sharks,Salford Stadium,AJ Bell Stadium,Primary Home,Salford,Greater Manchester,M30 7EY,"1 Stadium Way, Eccles, Salford M30 7EY",53.4688,-2.3739,12000,Grass,2012
+STAD_SARA_01,Saracens,StoneX Stadium,Copthall / Barnet Copthall,Primary Home,London,Greater London,NW4 1RL,"Greenlands Lane, Hendon, London NW4 1RL",51.6033,-0.2229,10500,Artificial Turf (3G),1939
+STAD_TWIC_01,Harlequins / RFU,Allianz Stadium,Twickenham / HQ / Home of Rugby,Marquee Venue (Big Game / Big Summer Kick-Off / Finals),Twickenham,Greater London,TW2 7XW,"200 Whitton Road, Twickenham TW2 7XW",51.4559,-0.3415,82000,Hybrid Grass (Desso GrassMaster),1909
+STAD_LOND_01,Saracens,London Stadium,Olympic Stadium,Marquee Venue (The Showdown),London,Greater London,E20 2ST,"Queen Elizabeth Olympic Park, London E20 2ST",51.5388,-0.0166,60000,Hybrid Grass,2012
+STAD_TOTT_01,Saracens,Tottenham Hotspur Stadium,New White Hart Lane,Marquee Venue (The Showdown),London,Greater London,N17 0AP,"782 High Road, Tottenham, London N17 0AP",51.6043,-0.0662,62850,Hybrid Grass / Retractable,2019

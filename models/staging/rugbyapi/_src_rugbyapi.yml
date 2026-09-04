@@ -1,0 +1,12 @@
+sources:
+  - name: rugbyapi
+    description: Source for Rugby API data
+    database: rugby-analytics-507511
+    schema: raw
+    tables:
+      - name: match_details
+        description: Match Details
+      - name: player_stats
+        description: Player Statistics by Match
+      - name: team_stats
+        description: Team Statistics by Match
