@@ -1,0 +1,33 @@
+version: 1
+
+seeds:
+  - name: dim_position
+    description: "Seed data for rugby positions"
+    columns:
+      - name: position_id
+        description: "Unique identifier for the position"
+        tests:
+          - unique
+          - not_null
+      - name: position
+        description: "Name of the rugby position"
+        tests:
+          - not_null
+      - name: position_description
+        description: "Description of the rugby position"
+        tests:
+          - not_null
+      - name: position_group
+        description: " Group classification of the rugby position (e.g. Centres, Second Row)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Front Row', 'Second Row', 'Back Row', 'Half-Backs', 'Centres', 'Back Three', 'Forwards Substitute', 'Backs Substitute']
+      - name: position_unit
+        description: "Unit classification of the rugby position (e.g., Forward, Back)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Forwards', 'Backs']
+      - name: shirt_number
+        description: "Shirt number associated with the position"
