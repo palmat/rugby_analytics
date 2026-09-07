@@ -31,3 +31,37 @@ seeds:
               values: ['Forwards', 'Backs']
       - name: shirt_number
         description: "Shirt number associated with the position"
+  - name: ref_stadium
+    description: "Reference data for rugby stadiums"
+    columns:
+      - name: stadium_id
+        description: "Unique identifier for the stadium"
+        tests:
+          - unique
+          - not_null
+      - name: stadium_name
+        description: "Name of the rugby stadium"
+        tests:
+          - not_null
+      - name: club_name
+        description: "Name of the club associated with the stadium"
+        tests:
+          - not_null
+      - name: venue_type
+        description: "Type of venue (e.g., Primary Home, Secondary Home)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Primary Home', 'Marquee Venue']
+  - name: ref_team
+    description: "Reference data for rugby teams"
+    columns:
+      - name: team_id
+        description: "Unique identifier for the team"
+        tests:
+          - unique
+          - not_null
+      - name: team_name
+        description: "Name of the rugby team"
+        tests:
+          - not_null
