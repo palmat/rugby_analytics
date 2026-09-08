@@ -22,13 +22,15 @@ seeds:
         tests:
           - not_null
           - accepted_values:
-              values: ['Front Row', 'Second Row', 'Back Row', 'Half-Backs', 'Centres', 'Back Three', 'Forwards Substitute', 'Backs Substitute']
+              arguments:
+                values: ['Front Row', 'Second Row', 'Back Row', 'Half-Backs', 'Centres', 'Back Three', 'Forwards Substitute', 'Backs Substitute', 'Unknown']
       - name: position_unit
         description: "{{ doc('position_unit') }}"
         tests:
           - not_null
           - accepted_values:
-              values: ['Forwards', 'Backs']
+              arguments:
+                values: ['Forwards', 'Backs', 'Unknown']
       - name: shirt_number
         description: "Shirt number associated with the position"
   - name: ref_stadium
@@ -39,20 +41,41 @@ seeds:
         tests:
           - unique
           - not_null
-      - name: stadium_name
-        description: "Name of the rugby stadium"
-        tests:
-          - not_null
       - name: club_name
         description: "Name of the club associated with the stadium"
         tests:
           - not_null
+      - name: stadium_name
+        description: "Name of the rugby stadium"
+        tests:
+          - not_null
+      - name: nickname
+        description: "Nickname for the stadium"
       - name: venue_type
         description: "Type of venue (e.g., Primary Home, Secondary Home)"
         tests:
           - not_null
           - accepted_values:
-              values: ['Primary Home', 'Marquee Venue']
+              arguments:
+                values: ['Primary Home', 'Marquee Venue']
+      - name: city
+        description: Stadiums Town/City location
+      - name: county
+        description: Stadiums County location
+      - name: postcode
+        description: Stadiums Postcode
+      - name: address
+        description: Stadiums Full Address
+      - name: latitude
+        description: "Latitude coordinate of the stadium"
+      - name: longitude
+        description: "Longitude coordinate of the stadium"
+      - name: capacity
+        description: "Seating capacity of the stadium"
+      - name: pitch_surface
+        description: "Type of pitch surface (e.g., Grass, Artificial)"
+      - name: year_opened
+        description: "Year the stadium was opened"
   - name: ref_team
     description: "Reference data for rugby teams"
     columns:
@@ -65,3 +88,43 @@ seeds:
         description: "Name of the rugby team"
         tests:
           - not_null
+      - name: nickname
+        description: "Common nickname used for the team"
+      - name: short_code
+        description: "Short code abbreviation for the team"
+      - name: year_formed
+        description: "Year the team was founded"
+      - name: squad_size
+        description: "Number of players in the team's squad"
+      - name: club_captain
+        description: "Name of the club captain"
+      - name: mascot_name
+        description: "Name of the team's mascot"
+      - name: mascot_description
+        description: "Description of the team's mascot"
+      - name: home_shirt_details
+        description: "Description of the home kit shirt"
+      - name: away_shirt_details
+        description: "Description of the away kit shirt"
+      - name: third_strip_details
+        description: "Description of the third kit strip"
+      - name: kit_manufacturer
+        description: "Manufacturer of the team's kit"
+      - name: main_shirt_sponsor
+        description: "Main sponsor featured on the team's shirt"
+      - name: premiership_titles
+        description: "Number of premiership titles won by the team"
+      - name: last_premiership_title
+        description: "Year of the team's most recent premiership title"
+      - name: european_champions_cup_titles
+        description: "Number of European Champions Cup titles won by the team"
+      - name: social_media_handle
+        description: "Team's official social media handle"
+      - name: official_website
+        description: "URL of the team's official website"
+      - name: chairperson
+        description: "Name of the team's chairperson"
+      - name: director_of_rugby
+        description: "Name of the team's director of rugby"
+      - name: head_coach
+        description: "Name of the team's head coach"

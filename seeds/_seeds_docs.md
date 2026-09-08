@@ -2,10 +2,11 @@
 
 One of the following values:
 
-| position_unit | definition                          |
+| position_unit  | definition                           |
 |----------------|--------------------------------------|
 | Forwards       | Positions 1–8, the forward pack      |
 | Backs          | Positions 9–15, the back line        |
+| Unknown        | Unknown position                     |
 
 {% enddocs %}
 
@@ -23,5 +24,6 @@ One of the following values:
 | Centres             | Positions 12-13, the engine room.       |
 | Forwards Substitute | Positions 16-21.                        |
 | Backs Substitute    | Positions 21-23.                        |
+| Unknown             | Unknown position.                       |
 
 {% enddocs %}
