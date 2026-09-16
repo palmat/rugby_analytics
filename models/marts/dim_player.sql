@@ -1,14 +1,8 @@
-with player_list as (
-    select distinct player_id, name, team
-    from {{ ref('stg_rugbyapi__player_stats') }}
-    where 1=1
-      {# and team like '%orthamp%' #}
-), 
-
-position_counts as (
+with position_counts as (
   select
      player_id,
      name,
+     team,
      position,
      count(*) as position_count
   from {{ ref('stg_rugbyapi__player_stats') }}
@@ -19,19 +13,12 @@ position_counts as (
   group by
      player_id,
      name,
+     team,
      position
 ),
 
-ranked_positions as (
-  select
-     player_id,
-     name,
-     position,
-     position_count,
-     row_number() over (
-       partition by player_id
-       order by position_count desc, position
-     ) as position_rank
+player_list as (
+  select distinct player_id, name, team
   from position_counts
 ),
 
@@ -41,10 +28,18 @@ ranked_positions_pivoted as (
      max(case when position_rank = 1 then position end) as primary_position,
      max(case when position_rank = 2 then position end) as secondary_position,
      max(case when position_rank = 3 then position end) as tertiary_position
-  from ranked_positions
-  where position_rank <= 3
-  group by
-     player_id
+  from (
+    select
+       player_id,
+       position,
+       row_number() over (
+         partition by player_id
+         order by position_count desc, position
+       ) as position_rank
+    from position_counts
+    qualify position_rank <= 3
+  )
+  group by player_id
 ),
 
 position_key as (
@@ -54,25 +49,25 @@ position_key as (
      dp2.position_id as secondary_position_key,
      dp3.position_id as tertiary_position_key
    from ranked_positions_pivoted rpp
-   left outer join {{ ref("dim_position")}} dp1
+   left outer join {{ ref("dim_position") }} dp1
        on rpp.primary_position = dp1.position
-   left outer join {{ ref("dim_position")}} dp2
+   left outer join {{ ref("dim_position") }} dp2
        on rpp.secondary_position = dp2.position
-   left outer join {{ ref("dim_position")}} dp3
+   left outer join {{ ref("dim_position") }} dp3
        on rpp.tertiary_position = dp3.position
 ),
 
 player_name as (
-select
-    pl.player_id,
-    pl.name,
-    pl.team,
-    coalesce(rp.primary_position_key,-1) as primary_position_key,
-    coalesce(rp.secondary_position_key,-1) as secondary_position_key,
-    coalesce(rp.tertiary_position_key,-1) as tertiary_position_key
-from player_list pl
-left outer join position_key rp
-    on pl.player_id = rp.player_id
+  select
+      pl.player_id,
+      pl.name,
+      lower(pl.team) as team,
+      coalesce(rp.primary_position_key, -1) as primary_position_key,
+      coalesce(rp.secondary_position_key, -1) as secondary_position_key,
+      coalesce(rp.tertiary_position_key, -1) as tertiary_position_key
+  from player_list pl
+  left outer join position_key rp
+      on pl.player_id = rp.player_id
 ),
 
 final as (
@@ -84,10 +79,9 @@ final as (
      pn.secondary_position_key,
      pn.tertiary_position_key
    from player_name pn
-   left outer join {{ref("dim_team")}} dt
-       on lower(pn.team) = lower(dt.team_name_short)
+   left outer join {{ ref("dim_team") }} dt
+       on pn.team = lower(dt.team_name_short)
 )
 
-select
-   *
+select *
 from final
