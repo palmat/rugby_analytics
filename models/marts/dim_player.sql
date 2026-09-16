@@ -70,6 +70,13 @@ player_name as (
       on pl.player_id = rp.player_id
 ),
 
+dim_team_lower as (
+  select
+     team_key,
+     lower(team_name_short) as team_name_short_lower
+  from {{ ref("dim_team") }}
+),
+
 final as (
    select
      pn.player_id,
@@ -79,8 +86,8 @@ final as (
      pn.secondary_position_key,
      pn.tertiary_position_key
    from player_name pn
-   left outer join {{ ref("dim_team") }} dt
-       on pn.team = lower(dt.team_name_short)
+   left outer join dim_team_lower dt
+       on pn.team = dt.team_name_short_lower
 )
 
 select *
