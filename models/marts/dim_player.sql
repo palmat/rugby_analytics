@@ -49,11 +49,11 @@ position_key as (
      dp2.position_id as secondary_position_key,
      dp3.position_id as tertiary_position_key
    from ranked_positions_pivoted rpp
-   left outer join {{ ref("dim_position") }} dp1
+   left outer join {{ ref("ref_position") }} dp1
        on rpp.primary_position = dp1.position
-   left outer join {{ ref("dim_position") }} dp2
+   left outer join {{ ref("ref_position") }} dp2
        on rpp.secondary_position = dp2.position
-   left outer join {{ ref("dim_position") }} dp3
+   left outer join {{ ref("ref_position") }} dp3
        on rpp.tertiary_position = dp3.position
 ),
 
@@ -72,13 +72,14 @@ player_name as (
 
 dim_team_lower as (
   select
-     team_key,
-     lower(team_name_short) as team_name_short_lower
-  from {{ ref("dim_team") }}
+     {{ int_surrogate_key(['team_id']) }} as team_key,
+     lower({{ team_name_short('team_name') }}) as team_name_short_lower
+  from {{ ref('ref_team') }}
 ),
 
 final as (
    select
+     {{ int_surrogate_key(['pn.player_id']) }} as player_key,
      pn.player_id,
      pn.name,
      dt.team_key,

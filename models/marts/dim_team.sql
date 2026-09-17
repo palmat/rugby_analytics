@@ -1,8 +1,16 @@
+with stadium_keys as (
+  select
+      {{ int_surrogate_key(['stadium_id']) }} as stadium_key,
+      club_name,
+      venue_type
+  from {{ ref('ref_stadium') }}
+)
+
 select
-    row_number() over (order by team_id) as team_key,
+    {{ int_surrogate_key(['t.team_id']) }} as team_key,
     t.team_id,
     t.team_name,
-    split(t.team_name, ' ')[offset(0)] as team_name_short,
+    {{ team_name_short('t.team_name') }} as team_name_short,
     t.nickname,
     t.short_code,
     t.year_formed,
@@ -23,8 +31,8 @@ select
     t.chairperson,
     t.director_of_rugby,
     t.head_coach,
-    s.stadium_key as home_stadium_key
-from {{ ref('ref_team')}} t
-left outer join {{ ref('dim_stadium')}} s
-    on t.team_name = s.club_name
-    and s.venue_type = 'Primary Home'
+    sk.stadium_key as home_stadium_key
+from {{ ref('ref_team') }} t
+left outer join stadium_keys sk
+    on t.team_name = sk.club_name
+    and sk.venue_type = 'Primary Home'
