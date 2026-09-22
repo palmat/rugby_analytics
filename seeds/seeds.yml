@@ -128,3 +128,15 @@ seeds:
         description: "Name of the team's director of rugby"
       - name: head_coach
         description: "Name of the team's head coach"
+  - name: ref_team_name_mapping
+    description: "Maps every team name variant found in the rugbyapi source data (short names, full names, rebrand names) to the canonical team_id used in ref_team"
+    columns:
+      - name: source_team_name
+        description: "Team name as it appears in a rugbyapi source table"
+        tests:
+          - unique
+          - not_null
+      - name: team_id
+        description: "Canonical team_id from ref_team that this source name resolves to"
+        tests:
+          - not_null
