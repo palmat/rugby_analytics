@@ -140,3 +140,27 @@ seeds:
         description: "Canonical team_id from ref_team that this source name resolves to"
         tests:
           - not_null
+  - name: ref_venue_team_mapping
+    description: "Maps a rugbyapi venue_id to the ref_team.team_id of the club whose home ground it is, derived from which team appears in every match played at that venue. Genuinely neutral/one-off venues (e.g. cup finals at a shared stadium) are intentionally omitted."
+    columns:
+      - name: venue_id
+        description: "Venue id as it appears in the rugbyapi match_details source"
+        tests:
+          - unique
+          - not_null
+      - name: team_id
+        description: "Canonical team_id from ref_team for the club that home-hosts at this venue"
+        tests:
+          - not_null
+  - name: ref_match_home_team_override
+    description: "Manually confirmed home-team corrections for one-off marquee/neutral-venue matches where the source's home_team label is wrong and no venue-frequency rule can resolve it (each venue only hosted that fixture once)"
+    columns:
+      - name: match_id
+        description: "match_id of the fixture being corrected"
+        tests:
+          - unique
+          - not_null
+      - name: team_id
+        description: "Canonical team_id from ref_team for the confirmed true home team"
+        tests:
+          - not_null
