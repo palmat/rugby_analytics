@@ -14,7 +14,7 @@ One of the following values:
 
 One of the following values:
 
-| position_unit       | definition                              |
+| position_group      | definition                              |
 |---------------------|-----------------------------------------|
 | Front Row           | Positions 1–3, the puddings.            |
 | Second Row          | Positions 4-5, the big lads.            |
@@ -25,5 +25,7 @@ One of the following values:
 | Forwards Substitute | Positions 16-21.                        |
 | Backs Substitute    | Positions 21-23.                        |
 | Unknown             | Unknown position.                       |
+
+Shirt 21 appears in both substitute groups because it depends on the bench split: forward in a 6–2, back in a 5–3.
 
 {% enddocs %}
