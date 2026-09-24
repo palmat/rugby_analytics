@@ -20,7 +20,9 @@ flowchart LR
     S[seeds<br/>ref_* reference data] --> D
     C --> D[intermediate<br/>int_team_match_stats]
     D --> E[marts: fact_team_match]
-    S --> F[marts: dim_team, dim_player,<br/>dim_stadium, dim_position, dim_date]
+    S --> F[dims: dim_team, dim_player,<br/>dim_stadium, dim_position, dim_date]
+    E --> G[Visualisation Layer: Power BI currently]
+    F --> G
 ```
 
 ## Scope
