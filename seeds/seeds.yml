@@ -164,3 +164,37 @@ seeds:
         description: "Canonical team_id from ref_team for the confirmed true home team"
         tests:
           - not_null
+  - name: ref_rounds
+    description: "Reference data for rugby competition rounds"
+    config:
+      column_types:
+        season: string
+    columns:
+      - name: round_id
+        description: "Round Number"
+        tests:
+          - unique
+          - not_null
+      - name: season
+        description: "Season of the competition round, e.g. 25_26"
+        tests:
+          - not_null
+      - name: competition
+        description: "Competition Name"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Prem', 'Prem Cup', 'Champions Cup']
+      - name: round_type
+        description: "Name of the specific round type (e.g., normal, playoffs)"
+        tests:
+          - not_null
+      - name: start_date
+        description: "Competition Round Start Date"
+        tests:
+          - not_null
+      - name: end_date
+        description: "Competition Round End Date"
+        tests:
+          - not_null

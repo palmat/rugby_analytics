@@ -56,6 +56,10 @@ The source data is messy, and most of the interesting work is in `int_team_match
 
 Reference seeds have dbt tests (unique, not null, accepted values), and columns are documented with `{% docs %}` blocks.
 
+## Design decisions
+
+- **Added a `ref_rounds` seed** so `dim_date` can show which round (and competition/round type) each date falls in, without joining out to match data just to answer "what round was this?".
+
 ## Status
 
 **Done**
