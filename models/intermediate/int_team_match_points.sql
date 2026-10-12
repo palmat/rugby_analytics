@@ -36,7 +36,7 @@ final as (
     select
         tm.match_id,
         tm.team_name,
-        tm.team_id,
+        tnm.team_id,
         case
             when tm.team_score is null or tm.opponent_score is null then null
             when tm.team_score > tm.opponent_score then 4
@@ -57,6 +57,8 @@ final as (
     left join match_tries mt
         on tm.match_id = mt.match_id
         and tm.team_id = mt.team_id
+    left join {{ ref('ref_team_name_mapping') }} tnm
+        on tm.team_name = tnm.source_team_name
     -- where team_score is not null and opponent_score is not null
 )
 

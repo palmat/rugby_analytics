@@ -93,6 +93,7 @@ from deduped
 
 team_stats as (
 select
+   mt.match_id,
    cast(format_date('%Y%m%d', cast(mt.date as date)) as int64) as date_key,
    mt.kickoff_time,
    mt.raw_team_name,
