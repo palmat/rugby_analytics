@@ -73,6 +73,7 @@ Reference seeds have dbt tests (unique, not null, accepted values), and columns 
 
 - [ ] A player-per-match fact
 - [ ] dbt tests on the marts (key uniqueness, relationships)
+- [ ] Investigate `int_team_match_points`: `total_points` doesn't look right. Compare one team's regular-season points with the real table; check whether `tries` already includes `penalty_tries` (possible double count in the try bonus)
 - [ ] dbt tests on the intermediate layer, starting with `int_team_match_points`: unique `match_id` + `team_id` on `stg_rugbyapi__team_stats` (avoids join fan-out), not null on keys, and a check for matches with no team stats row
 - [ ] Move the one-off corrections in `scripts/Data_Fixes.sql` into the model, so raw data stays untouched
 - [ ] Claude API scouting report layer
