@@ -2,41 +2,31 @@
 
 with team_matches as (
 
+    -- deduped, score-corrected, one row per team per match (team_id is the slug)
     select
         match_id,
-        home_team as team_name,
-        home_team_id as team_id,
-        home_score as team_score,
-        away_score as opponent_score
-    from {{ ref('stg_rugbyapi__match_details') }}
-
-    union all
-
-    select
-        match_id,
-        away_team as team_name,
-        away_team_id as team_id,
-        away_score as team_score,
-        home_score as opponent_score
-    from {{ ref('stg_rugbyapi__match_details') }}
+        team_id,
+        team_score,
+        opponent_score
+    from {{ ref('int_team_match_scores') }}
 
 ),
 
 match_tries as (
-select
-  match_id,
-  team_id,
-  team as team_name,
-  ifnull(penalty_tries,0)+ifnull(tries,0) as total_tries
-from {{ref('stg_rugbyapi__team_stats')}}   
+
+    select
+        match_id,
+        team_id,
+        ifnull(penalty_tries, 0) + ifnull(tries, 0) as total_tries
+    from {{ ref('int_team_match_stats') }}
+
 ),
 
 final as (
 
     select
         tm.match_id,
-        tm.team_name,
-        tnm.team_id,
+        tm.team_id,
         case
             when tm.team_score is null or tm.opponent_score is null then null
             when tm.team_score > tm.opponent_score then 4
@@ -49,7 +39,7 @@ final as (
             then 1
             else 0
         end as losing_bonus_point,
-        case 
+        case
             when mt.total_tries >= 4 then 1
             else 0
         end as try_bonus_point
@@ -57,14 +47,12 @@ final as (
     left join match_tries mt
         on tm.match_id = mt.match_id
         and tm.team_id = mt.team_id
-    left join {{ ref('ref_team_name_mapping') }} tnm
-        on tm.team_name = tnm.source_team_name
-    -- where team_score is not null and opponent_score is not null
+    -- where tm.team_score is not null and tm.opponent_score is not null
+
 )
 
 select
     match_id,
-    team_name,
     team_id,
     match_points,
     try_bonus_point,
