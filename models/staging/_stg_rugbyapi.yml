@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_rugbyapi__match_details
+    description: "Match details from the Rugby API, one row per match"
+    columns:
+      - name: match_id
+        description: "Unique identifier for the match"
+        tests:
+          - unique
+          - not_null
+      - name: date
+        description: "Match date"
+        tests:
+          - not_null
+      - name: home_team
+        tests:
+          - not_null
+      - name: away_team
+        tests:
+          - not_null
+
+  - name: stg_rugbyapi__team_stats
+    description: "Team statistics, one row per team per match"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [match_id, team_id]
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: team_id
+        tests:
+          - not_null
+
+  - name: stg_rugbyapi__player_stats
+    description: "Player statistics, one row per player per match"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          config:
+            severity: warn  # source lists a player under two teams in one match
+          arguments:
+            combination_of_columns: [match_id, player_id]
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: player_id
+        tests:
+          - not_null

@@ -51,8 +51,8 @@ from (
             date,
             least(home_team_slug, away_team_slug),
             greatest(home_team_slug, away_team_slug),
-            least(home_score, away_score),
-            greatest(home_score, away_score)
+            cast(least(home_score, away_score) as int64),
+            cast(greatest(home_score, away_score) as int64)
          order by
             case when home_team_slug = resolved_home_team_slug then 0 else 1 end,
             match_id
