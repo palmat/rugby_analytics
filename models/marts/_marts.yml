@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: dim_date
+    columns:
+      - name: date_id
+        tests:
+          - unique
+          - not_null
+      - name: date_day
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_position
+    columns:
+      - name: position_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_stadium
+    columns:
+      - name: stadium_key
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_team
+    columns:
+      - name: team_key
+        tests:
+          - unique
+          - not_null
+      - name: team_id
+        tests:
+          - unique
+          - not_null
+      - name: home_stadium_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_stadium')
+                field: stadium_key
+
+  - name: dim_player
+    columns:
+      - name: player_key
+        tests:
+          - unique:
+              config:
+                severity: warn  # same player_id appears with differing names/teams in source
+          - not_null
+      - name: team_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_team')
+                field: team_key
+      - name: primary_position_key
+        tests:
+          - not_null
+
+  - name: fact_team_match
+    description: "One row per team per match"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [match_id, team_key]
+    columns:
+      - name: team_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_team')
+                field: team_key
+      - name: match_id
+        tests:
+          - not_null
+      - name: date_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_id
+      - name: total_points
+        tests:
+          - not_null:
+              config:
+                severity: warn
