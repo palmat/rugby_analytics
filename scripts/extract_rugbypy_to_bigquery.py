@@ -24,7 +24,7 @@ fight a broken pip package, this script talks to the same v3 parquet
 files directly using `pandas.read_parquet()` over HTTPS - which is all
 the rugbypy functions do under the hood anyway.
 
-CONCEPTS USED (a few notes since Python is new to you)
+CONCEPTS USED
 ---------------------------------------------------------
 - A "DataFrame" (from the pandas library) is basically a spreadsheet
   living in memory: rows and columns, with helpers for filtering,

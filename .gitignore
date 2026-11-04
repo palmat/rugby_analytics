@@ -6,3 +6,6 @@ profiles.yml
 ~/.dbt_keys/
 *.json
 dbt_internal_packages/
+
+# Claude Code instructions (local only)
+CLAUDE.md
