@@ -1,0 +1,6 @@
+# Pinned tooling for CI (.github/workflows/ci.yml). Versions match the local dev environment.
+dbt-core==1.12.3
+dbt-bigquery==1.12.0
+sqlfluff==4.5.0
+sqlfluff-templater-dbt==4.5.0
+ruff==0.17.3
