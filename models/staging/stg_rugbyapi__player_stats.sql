@@ -16,7 +16,7 @@ renamed as (
             when player_id = '54bc2b1c' and name = 'George Barton' then 'George Martin'
             when player_id = '2b69c803' and name = 'Tom Gordon' then 'Thomas Gordon'
             else name
-        end as name,
+        end as name,  -- noqa: RF04
         team,
         team_id,
         team_vs,
