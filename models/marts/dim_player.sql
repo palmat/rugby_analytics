@@ -1,25 +1,48 @@
 with position_counts as (
   select
      player_id,
-     name,
-     team,
      position,
      count(*) as position_count
   from {{ ref('stg_rugbyapi__player_stats') }}
   where 1=1
     and position is not null
-  --   and lower(position) not like '%sub%'
-  --   and team like '%orthamp%'
   group by
      player_id,
-     name,
-     team,
      position
 ),
 
+-- One name per player: the most used (latest wins a tie).
+player_names as (
+  select player_id, name
+  from {{ ref('stg_rugbyapi__player_stats') }}
+  where position is not null
+  group by player_id, name
+  qualify row_number() over (
+    partition by player_id
+    order by count(*) desc, max(game_date) desc
+  ) = 1
+),
+
+-- One team per player: the team_id with the most matches (latest wins a tie).
+-- team_id is stable where the source's team name varies ("Leicester" vs
+-- "Leicester Tigers"), and a player who moves club keeps a single row here;
+-- the per-match team lives on the fact table.
+player_teams as (
+  select player_id, team_id
+  from {{ ref('stg_rugbyapi__player_stats') }}
+  where position is not null
+  group by player_id, team_id
+  qualify row_number() over (
+    partition by player_id
+    order by count(*) desc, max(game_date) desc
+  ) = 1
+),
+
 player_list as (
-  select distinct player_id, name, team
-  from position_counts
+  select pn.player_id, pn.name, pt.team_id
+  from player_names pn
+  inner join player_teams pt
+      on pn.player_id = pt.player_id
 ),
 
 ranked_positions_pivoted as (
@@ -61,7 +84,7 @@ player_name as (
   select
       pl.player_id,
       pl.name,
-      lower(pl.team) as team,
+      pl.team_id as source_team_id,
       coalesce(rp.primary_position_key, -1) as primary_position_key,
       coalesce(rp.secondary_position_key, -1) as secondary_position_key,
       coalesce(rp.tertiary_position_key, -1) as tertiary_position_key
@@ -70,10 +93,10 @@ player_name as (
       on pl.player_id = rp.player_id
 ),
 
-dim_team_lower as (
+dim_team_by_source_id as (
   select
      {{ int_surrogate_key(['team_id']) }} as team_key,
-     lower({{ team_name_short('team_name') }}) as team_name_short_lower
+     source_team_id
   from {{ ref('ref_team') }}
 ),
 
@@ -87,8 +110,8 @@ final as (
      pn.secondary_position_key,
      pn.tertiary_position_key
    from player_name pn
-   left outer join dim_team_lower dt
-       on pn.team = dt.team_name_short_lower
+   left outer join dim_team_by_source_id dt
+       on pn.source_team_id = dt.source_team_id
 )
 
 select *

@@ -9,7 +9,14 @@ renamed as (
     select
         -- identifiers & context
         player_id,
-        name,
+        -- source has some names wrong against these ids; correct them to the player actually
+        -- playing in the Premiership ("Ollie Callan" and "George Barton" have never played in it)
+        case
+            when player_id = '0fb75fc2' and name = 'Ollie Callan' then 'Ollie Allan'
+            when player_id = '54bc2b1c' and name = 'George Barton' then 'George Martin'
+            when player_id = '2b69c803' and name = 'Tom Gordon' then 'Thomas Gordon'
+            else name
+        end as name,
         team,
         team_id,
         team_vs,
@@ -96,6 +103,15 @@ renamed as (
     where not (
         player_id = '5fbe8077'
         and team_id = '30ca1553'
+    )
+
+    -- player_id 96ac148c is Bristol's Tom Jordan. Two Newcastle-tagged rows
+    -- named "Tom Gordon" (matches 0db1da49 and 82cc0c83, Jan 2026) sit under
+    -- it, but Newcastle's Gordon already has rows for those matches under his
+    -- own id (2b69c803), so these are bad duplicates and are excluded.
+    and not (
+        player_id = '96ac148c'
+        and name = 'Tom Gordon'
     )
 
 )
