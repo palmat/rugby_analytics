@@ -1,9 +1,16 @@
 [sqlfluff]
 dialect = bigquery
-templater = dbt
+# The jinja templater (not the dbt templater) is used so linting needs no
+# BigQuery connection, which CI does not have. dbt built-ins (ref, source,
+# config, ...) are provided, and the project's own macros are stubbed below
+# because they depend on adapter.dispatch. Keep the stubs in step with macros/.
+templater = jinja
 max_line_length = 120
 exclude_rules = ST06
 
-[sqlfluff:templater:dbt]
-project_dir = .
-profiles_dir = .
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
+
+[sqlfluff:templater:jinja:macros]
+int_surrogate_key = {% macro int_surrogate_key(field_list) %}farm_fingerprint(concat({% for field in field_list %}cast({{ field }} as string){% if not loop.last %}, '~', {% endif %}{% endfor %})){% endmacro %}
+team_name_short = {% macro team_name_short(team_name_column) %}split({{ team_name_column }}, ' ')[offset(0)]{% endmacro %}

@@ -47,12 +47,11 @@ models:
     columns:
       - name: player_key
         tests:
-          - unique:
-              config:
-                severity: warn  # same player_id appears with differing names/teams in source
+          - unique
           - not_null
       - name: team_key
         tests:
+          - not_null
           - relationships:
               arguments:
                 to: ref('dim_team')
