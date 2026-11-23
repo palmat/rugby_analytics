@@ -103,6 +103,22 @@ DATA_BASE = "https://raw.githubusercontent.com/seanyboi/rugbydata/main/data/v3"
 # Gallagher Premiership's fixed competition_id in this data source.
 COMPETITION_ID = "1b875d20"
 
+# The ten Premiership clubs' team_ids (the source_team_id column in
+# seeds/ref_team.csv). Used to rescue league fixtures whose match detail file
+# has an empty competition_id - see get_season_matches().
+PREMIERSHIP_TEAM_IDS = {
+    "821a6e9b",  # Bath
+    "b6676fa6",  # Bristol
+    "ef6e2395",  # Exeter
+    "3c4f2505",  # Gloucester
+    "6a2502db",  # Harlequins
+    "5081cb86",  # Leicester
+    "1e02b3c3",  # Newcastle
+    "30ca1553",  # Northampton
+    "bd69e43e",  # Sale
+    "ebd7f173",  # Saracens
+}
+
 # The 2025/26 Premiership season runs across two calendar years, so we
 # select on match date rather than the source's "season" field (which is
 # just the calendar year of the match, and would otherwise split the
@@ -166,8 +182,42 @@ def get_season_matches() -> pd.DataFrame:
                 details.append(result)
 
     all_details = pd.DataFrame(details)
-    season_matches = all_details[all_details["competition_id"] == COMPETITION_ID].copy()
-    season_matches["date"] = pd.to_datetime(season_matches["date"])
+    is_premiership = all_details["competition_id"] == COMPETITION_ID
+
+    # Some genuine league fixtures have a detail file with the competition,
+    # venue and date fields empty/malformed (date is an int like 20250928), so
+    # the competition check above misses them. Keep a match with no
+    # competition_id if both sides are Premiership clubs.
+    is_unlabelled_premiership = (
+        all_details["competition_id"].isna()
+        & all_details["home_team_id"].isin(PREMIERSHIP_TEAM_IDS)
+        & all_details["away_team_id"].isin(PREMIERSHIP_TEAM_IDS)
+    )
+
+    # Registry dates are proper datetimes, unlike the malformed ones above.
+    registry_dates = registry.set_index("match_id")["date"]
+    all_details["date"] = all_details["match_id"].map(registry_dates)
+
+    # Some unlabelled records are duplicates of a properly labelled match (same
+    # two teams, same day) with the home/away scores reversed. Skip those.
+    all_details["fixture"] = (
+        all_details["date"].astype(str) + "|"
+        + all_details[["home_team_id", "away_team_id"]].apply(
+            lambda ids: "|".join(sorted(ids.astype(str))), axis=1
+        )
+    )
+    labelled_fixtures = set(all_details.loc[is_premiership, "fixture"])
+    is_unlabelled_premiership &= ~all_details["fixture"].isin(labelled_fixtures)
+
+    season_matches = all_details[is_premiership | is_unlabelled_premiership].copy()
+
+    rescued = season_matches["competition_id"].isna()
+    if rescued.any():
+        name = all_details.loc[is_premiership, "competition"].dropna().iloc[0]
+        season_matches.loc[rescued, ["competition_id", "competition"]] = [COMPETITION_ID, name]
+        print(f"Rescued {rescued.sum()} Premiership matches with no competition_id "
+              f"in their detail file.")
+    season_matches = season_matches.drop(columns="fixture")
     season_matches = season_matches[
         (season_matches["date"] >= SEASON_START) & (season_matches["date"] <= SEASON_END)
     ]
